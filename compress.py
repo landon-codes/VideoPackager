@@ -8,22 +8,22 @@ from pathlib import Path
 with open('paths.json') as file:
         ffmpeg: str = json.load(file)['ffmpeg']
 
-def compress_single(input: Path, output: Path) -> None:
-    os.makedirs(input / output, exist_ok=True)
+def compress_single(input_dir: Path, output_dir: Path, input_file: Path) -> None:
+    os.makedirs(input_dir / output_dir, exist_ok=True)
 
-    print(f'Staring: {input}')
+    print(f'[Staring: {input_file}]')
     try:
         subprocess.run(
-            [ffmpeg, '-y', '-i', input,
+            [ffmpeg, '-y', '-i', input_dir / input_file,
             '-c:v', 'libx265', 
             '-crf', '23',
-            '-preset' 'ultrafast', #TODO: impliment manual/custom preset input
+            '-preset', 'ultrafast', #TODO: impliment manual/custom preset input
             '-c:a', 'copy',
-            input / output],
+            (input_dir / output_dir) / input_file],
             check=True)
-        print(f'{input} completed.')
+        print(f'[{input_file} completed.]')
     except Exception as e:
-        print(f'{input} failed:\n{e}')
+        print(f'[{input_file} failed:\n{e}]')
 
 def compress_dir(input: Path, output: Path) -> None:
     # Get all video paths
