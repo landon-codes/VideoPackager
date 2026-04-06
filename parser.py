@@ -24,6 +24,7 @@ def parse(input: list) -> Program:
     if len(input) < 3:
         print("Insufficient arguments.\nAt least three arguments are required:")
         print("- command\n- input path\n- output path (relative to the input path)") 
+        sys.exit(1)
 
     # Required/Default values
     type: CommandType = CommandType.Undefined
