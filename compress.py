@@ -4,6 +4,10 @@ import os
 import subprocess
 from multiprocessing import Pool
 from pathlib import Path
+import psutil
+
+p = psutil.Process(os.getpid())
+p.nice(psutil.IDLE_PRIORITY_CLASS)
 
 with open('paths.json') as file:
         ffmpeg: str = json.load(file)['ffmpeg']
@@ -40,5 +44,5 @@ def compress_dir(input: Path, output: Path, arguments: list) -> None:
 
     jobs = [(input, output, p, arguments) for p in video_paths]
 
-    with Pool(3) as pool:
+    with Pool(2) as pool:
          pool.starmap(compress_single, jobs)
