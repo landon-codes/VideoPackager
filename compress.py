@@ -16,7 +16,6 @@ def compress_single(input_dir: Path, output_dir: Path, input_file: Path, argumen
         if argument[0] == '-preset':
              preset = argument[1]
     
-    
     os.makedirs((input_dir / output_dir) / os.path.dirname(input_file), exist_ok=True)
 
     print(f'[Staring: {input_file}]')
@@ -33,8 +32,12 @@ def compress_single(input_dir: Path, output_dir: Path, input_file: Path, argumen
     except Exception as e:
         print(f'[{input_file} failed:\n{e}]')
 
-def compress_dir(input: Path, output: Path) -> None:
+# Remember to use `if __name__ == '__main__'`
+def compress_dir(input: Path, output: Path, arguments: list) -> None:
     # Get all video paths
     video_paths: list = [p.relative_to(input) for p in input.rglob('*.mp4')]
 
-    #TODO: Impliment the remaining logic
+    jobs = [(input, output, p, arguments) for p in video_paths]
+
+    with Pool(3) as pool:
+         pool.starmap(compress_single, jobs)
