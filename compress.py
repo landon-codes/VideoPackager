@@ -30,6 +30,7 @@ def compress_single(input_dir: Path, output_dir: Path, input_file: Path, argumen
             '-crf', '23',
             '-preset', preset, #TODO: impliment manual/custom preset input
             '-c:a', 'copy',
+            '-threads', '2'
             (input_dir / output_dir) / input_file],
             check=True)
         print(f'[{input_file} completed.]')
