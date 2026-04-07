@@ -8,8 +8,15 @@ from pathlib import Path
 with open('paths.json') as file:
         ffmpeg: str = json.load(file)['ffmpeg']
 
-#TODO: Make compressed files be outputted in a single directory
-def compress_single(input_dir: Path, output_dir: Path, input_file: Path) -> None:
+def compress_single(input_dir: Path, output_dir: Path, input_file: Path, arguments: list) -> None:
+    # Default argument values
+    preset: str = 'faster'
+    
+    for argument in arguments:
+        if argument[0] == '-preset':
+             preset = argument[1]
+    
+    
     os.makedirs((input_dir / output_dir) / os.path.dirname(input_file), exist_ok=True)
 
     print(f'[Staring: {input_file}]')
@@ -18,7 +25,7 @@ def compress_single(input_dir: Path, output_dir: Path, input_file: Path) -> None
             [ffmpeg, '-y', '-i', input_dir / input_file,
             '-c:v', 'libx265', 
             '-crf', '23',
-            '-preset', 'ultrafast', #TODO: impliment manual/custom preset input
+            '-preset', preset, #TODO: impliment manual/custom preset input
             '-c:a', 'copy',
             (input_dir / output_dir) / input_file],
             check=True)
