@@ -8,8 +8,9 @@ from pathlib import Path
 with open('paths.json') as file:
         ffmpeg: str = json.load(file)['ffmpeg']
 
+#TODO: Make compressed files be outputted in a single directory
 def compress_single(input_dir: Path, output_dir: Path, input_file: Path) -> None:
-    os.makedirs(input_dir / output_dir, exist_ok=True)
+    os.makedirs((input_dir / output_dir) / os.path.dirname(input_file), exist_ok=True)
 
     print(f'[Staring: {input_file}]')
     try:
