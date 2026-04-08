@@ -1,5 +1,4 @@
 import json
-import sys
 import os
 import subprocess
 from multiprocessing import Pool
@@ -30,7 +29,7 @@ def compress_single(input_dir: Path, output_dir: Path, input_file: Path, argumen
             '-crf', '23',
             '-preset', preset,
             '-c:a', 'copy',
-            '-threads', '2'
+            '-threads', '2',
             (input_dir / output_dir) / input_file],
             check=True)
         print(f'[{input_file} completed.]')
