@@ -1,4 +1,4 @@
 {
     "ffmpeg": "ffmpeg-master-latest-win64-gpl-shared\\bin\\ffmpeg.exe",
-    "7zip": "7-ZipPortable\\App\\7-Zip\\7z.exe"
+    "7zip": "7-ZipPortable\\App\\7-Zip64\\7z.exe"
 }
