@@ -36,3 +36,4 @@ Just as before, the only argument is `-preset`.
 Anyone is welcome to suggest changes or help out with issues if there are any on the (github page)[https://github.com/landon-codes/VideoPackager].
 
 This project uses the MIT License, so anyone is able to derive work of any kind from this project.
+If you have any ideas you want to add to this, you can create your own version.
