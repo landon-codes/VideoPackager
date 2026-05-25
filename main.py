@@ -1,65 +1,63 @@
-import package
-import compress
 import sys
 from pathlib import Path
-from datetime import datetime
 
-start = datetime.now()
+from compress import compress
 
-# Get the command arguments
-args: list = sys.argv[1:]
+input_file: Path
+output_file: Path
+preset_flag: str = 'slow'
 
-command: str
-arguments: list = []
+cmd_arguments = sys.argv[1:]
 
-# Get the command
-if args[0] == 'pack':
-    command = 'pack'
-elif args[0] == 'compressDir':
-    command = 'compressDir'
-elif args[0] == 'compress':
-    command = 'compress'
+# Used to look ahead of a list without worrying about whether the value exists
+def peek(input: list, position: int):
+    if len(input) > position+1:
+        return input[position+1]
+    
+    # Returns nothing if value a cannot be found
+    return None
+
+# Checks for any command line arguments.
+# If none are provided, app gets them manually.
+if len(cmd_arguments) < 2:
+    print('No arguments were passed.')
+    print('At least two arguments are required:\n1. Input file (the one to be compressed)\n2. Output file (where that compressed file will go)')
+    print('You can also add a `-preset` flag to specify the libx265 preset. (Defaults to slow)')
+
+    # Some error handling might be a possibility here.
+    input_file = Path(input('Input file: '))
+    output_file = Path(input('Output file: '))
+    preset_flag_buffer = input('Preset flag (leave blank if none): ')
+
+    # Check preset flag values
+    if preset_flag_buffer != '':
+        preset_flag = preset_flag_buffer
+        
+# Case that arguments were given
 else:
-    print(f'Unkown command: {args[0]}')
-    sys.exit(1)
+    paths: list = []
 
-# Parse the arguments
-pos: int = 1 # Position in arguments
-length: int = len(args)
-has_input_file: bool = False
-input_file: str
-has_output_file: bool = False
-output_file: str
-has_second_input_file: bool = False
-second_input_file: str
-while length > pos:
-    if args[pos] == '-preset' and len(args) > pos:
-        arguments.append(('-preset', args[pos+1]))
-        pos += 2
-    else:
-        if not has_input_file:
-            has_input_file = True
-            input_file = args[pos]
-            pos += 1
-        elif not has_output_file:
-            has_output_file = True
-            output_file = args[pos]
-            pos += 1
-        elif not has_second_input_file:
-            has_second_input_file = True
-            second_input_file = args[pos]
-            pos += 1
+    # Parse arguments
+    position: int = 0
+    while position < len(cmd_arguments):
+        # Preset flag
+        if cmd_arguments[position] == '-preset':
+            next_token = peek(cmd_arguments, position)
+
+            if next_token != None:
+                preset_flag = next_token
+                position += 2 
+        # Path
+        else:
+            paths.append(cmd_arguments[position])
+            position += 1
 
 
-# Run the program
-if __name__ == '__main__':
-    if command == 'pack':
-        package.pack(Path(input_file), Path(output_file), arguments)
-    elif command == 'compressDir':
-        compress.compress_dir(Path(input_file), Path(output_file), arguments)
-    elif command == 'compress':
-        compress.compress_single(Path(input_file), Path(output_file), Path(second_input_file), arguments)
-
-end = datetime.now()
-
-print(f'Operation complete!\tTime elapsed: {start - end}')
+    # Check for potential errors
+    if len(paths) !=  2:
+        raise ValueError("Incorrect count of paths was provided.\nExactly two paths should be given: 1 in and 1 out.")
+    
+    input_file = Path(paths[0])
+    output_file = Path(paths[1])
+    
+compress(input_file, output_file, preset_flag)
