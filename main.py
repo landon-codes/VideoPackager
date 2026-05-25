@@ -11,7 +11,7 @@ cmd_arguments = sys.argv[1:]
 
 # Used to look ahead of a list without worrying about whether the value exists
 def peek(input: list, position: int):
-    if len(input) > position+2:
+    if len(input) > position+1:
         return input[position+1]
     
     # Returns nothing if value a cannot be found
@@ -38,22 +38,23 @@ else:
     paths: list = []
 
     # Parse arguments
-    for i in range(len(cmd_arguments)):
-        # Preset value
-        if cmd_arguments[i] == '-preset':
-            print(cmd_arguments[i]) #DEBUG
-            preset_value = peek(cmd_arguments, i)
+    position: int = 0
+    while position < len(cmd_arguments):
+        # Preset flag
+        if cmd_arguments[position] == '-preset':
+            next_token = peek(cmd_arguments, position)
 
-            if preset_value != None:
-                preset_flag = preset_value
-                i += 2 # Skip the two processed tokens.
-        # Path value
+            if next_token != None:
+                preset_flag = next_token
+                position += 2 
+        # Path
         else:
-            paths.append(cmd_arguments[i])
-            # Token should be automatically consumed.
+            paths.append(cmd_arguments[position])
+            position += 1
+
 
     # Check for potential errors
-    if len(paths) > 2 or len(paths) < 2:
+    if len(paths) !=  2:
         raise ValueError("Incorrect count of paths was provided.\nExactly two paths should be given: 1 in and 1 out.")
     
     input_file = Path(paths[0])

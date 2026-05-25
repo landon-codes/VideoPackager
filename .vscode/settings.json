@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
         "libx"
-    ]
+    ],
+    "python.REPL.enableREPLSmartSend": false
 }
