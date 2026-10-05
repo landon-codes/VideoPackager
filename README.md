@@ -2,6 +2,11 @@
 
 A Python application to compress videos using FFmpeg.
 
+## Depreciation notice
+This project is no longer being maintained due to a lack of a defined goal. You are welcome to fork the repository yourself to continue it.
+
+This project may become unarchived if a better, more specific goal for this project is decided by the original developer.
+
 ## Installation
 
 There are two ways you can download the application. 
